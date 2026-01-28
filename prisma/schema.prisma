@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  fromUserId String
+  toUserId   String
+  type       String
+  content    String?
+  payload    Json?
+  sentAt     DateTime @default(now())
+
+  @@index([fromUserId, toUserId, sentAt])
+}
+
