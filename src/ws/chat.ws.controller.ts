@@ -1,7 +1,7 @@
 import { FastifyRequest } from "fastify";
 import { WebSocket } from "ws";
 import { authenticateWs, AppError, wsAuthError } from "@core/index.js";
-import { chatConnections } from "../wsManager/chatConnections.js";
+import { chatConnections } from "src/wsManager/chatConnections.js";
 import { handleMessage } from "./handlers/message.handler.js";
 import { handleClose, handleError, sendUndeliveredMessages } from "./handlers/connection.handler.js";
 

@@ -1,15 +1,15 @@
 import { WebSocket, RawData } from "ws";
 import { FastifyRequest } from "fastify";
 import { checkBlocked } from "@core/index.js";
-import { chatConnections } from "../../wsManager/chatConnections.js";
-import { messageStore } from "../../wsManager/messageStore.js";
-import type { IncomingChatMessage, OutgoingMessage } from "../../types/message.js";
-import { isValidIncomingMessage } from "../../utils/validation.js";
+import { chatConnections } from "src/wsManager/chatConnections.js";
+import { messageStore } from "src/wsManager/messageStore.js";
+import type { IncomingChatMessage, OutgoingMessage } from "src/types/message.js";
+import { isValidIncomingMessage } from "src/utils/validation.js";
 import { createErrorMessage, ERROR_CODES } from "../utils/errorMessages.js";
 import {
 	sendChatNotification,
 	sendGameInviteNotification
-} from "../../services/notification.service.js";
+} from "src/services/notification.service.js";
 
 export const handleMessage = async (
 	raw: RawData,

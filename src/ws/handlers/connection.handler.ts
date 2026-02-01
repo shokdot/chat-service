@@ -1,8 +1,8 @@
 import { WebSocket } from "ws";
 import { FastifyRequest } from "fastify";
-import { chatConnections } from "../../wsManager/chatConnections.js";
-import { messageStore } from "../../wsManager/messageStore.js";
-import type { OutgoingMessage } from "../../types/message.js";
+import { chatConnections } from "src/wsManager/chatConnections.js";
+import { messageStore } from "src/wsManager/messageStore.js";
+import type { OutgoingMessage } from "src/types/message.js";
 
 export const handleClose = (userId: string | undefined): void => {
 	if (userId) {

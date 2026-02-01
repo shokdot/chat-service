@@ -1,4 +1,4 @@
-import type { OutgoingMessage } from "../../types/message.js";
+import type { OutgoingMessage } from "src/types/message.js";
 
 export const createErrorMessage = (
 	code: string,

@@ -29,17 +29,19 @@ export const sendChatNotification = async (
 
 export const sendGameInviteNotification = async (
 	userId: string,
-	senderId: string
+	senderId: string,
+	invitationId?: string
 ): Promise<void> => {
 	try {
+		const message: { from: string; invitationId?: string } = { from: senderId };
+		if (invitationId) message.invitationId = invitationId;
+
 		await axios.post(
 			`${NOTIFICATION_SERVICE_URL}/internal/`,
 			{
 				userId,
 				type: "GAME_INVITE",
-				message: JSON.stringify({
-					from: senderId
-				})
+				message: JSON.stringify(message)
 			},
 			{
 				headers: {
