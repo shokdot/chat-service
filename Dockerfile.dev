@@ -1,0 +1,28 @@
+FROM node:20
+
+WORKDIR /apps
+
+COPY core/package*.json core/
+COPY core/tsconfig.json core/
+COPY core/src core/src
+
+WORKDIR /apps/core
+RUN npm install && npm run build
+
+WORKDIR /apps
+
+COPY chat-service/package*.json chat-service/
+COPY chat-service/tsconfig.json chat-service/
+COPY chat-service/tsup.config.ts chat-service/
+COPY chat-service/src chat-service/src
+COPY chat-service/prisma chat-service/prisma
+COPY chat-service/prisma.config.ts chat-service/
+
+WORKDIR /apps/chat-service
+
+RUN npm install
+
+EXPOSE 3000
+EXPOSE 5555
+
+CMD ["npm", "run", "dev"]
