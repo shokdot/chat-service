@@ -4,15 +4,20 @@ import { chatConnections } from "src/wsManager/chatConnections.js";
 import { messageStore } from "src/wsManager/messageStore.js";
 import type { OutgoingMessage } from "src/types/message.js";
 
-export const handleClose = (userId: string | undefined): void => {
+export const handleClose = (userId: string | undefined, ws: WebSocket): void => {
 	if (userId) {
-		chatConnections.remove(userId);
+		// Only remove if this is still the active connection for this user.
+		// A newer connection may have already replaced this one on reconnect.
+		if (chatConnections.get(userId) === ws) {
+			chatConnections.remove(userId);
+		}
 	}
 };
 
 export const handleError = (
 	error: Error,
 	userId: string | undefined,
+	ws: WebSocket,
 	request: FastifyRequest
 ): void => {
 	request.log.error(
@@ -25,7 +30,9 @@ export const handleError = (
 	);
 
 	if (userId) {
-		chatConnections.remove(userId);
+		if (chatConnections.get(userId) === ws) {
+			chatConnections.remove(userId);
+		}
 	}
 };
 

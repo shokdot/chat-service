@@ -28,11 +28,11 @@ const wsChatHandler = async (ws: WebSocket, request: FastifyRequest) => {
 		});
 
 		ws.on("close", () => {
-			handleClose(userId);
+			handleClose(userId, ws);
 		});
 
 		ws.on("error", (error) => {
-			handleError(error, userId, request);
+			handleError(error, userId, ws, request);
 		});
 	} catch (error) {
 		if (error instanceof AppError) {
