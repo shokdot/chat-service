@@ -7,14 +7,16 @@ datasource db {
 }
 
 model Message {
-  id         String   @id @default(uuid())
-  fromUserId String
-  toUserId   String
-  type       String
-  content    String?
-  payload    Json?
-  sentAt     DateTime @default(now())
+  id          String    @id @default(uuid())
+  fromUserId  String
+  toUserId    String
+  type        String
+  content     String?
+  payload     Json?
+  sentAt      DateTime  @default(now())
+  deliveredAt DateTime?
 
   @@index([fromUserId, toUserId, sentAt])
+  @@index([toUserId, deliveredAt])
 }
 

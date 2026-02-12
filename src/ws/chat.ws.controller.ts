@@ -9,7 +9,13 @@ const wsChatHandler = async (ws: WebSocket, request: FastifyRequest) => {
 	let userId: string | undefined;
 
 	try {
-		const authResult = authenticateWs(request.headers["authorization"], ws);
+		// Browser WebSocket API doesn't support custom headers,
+		// so accept token from query param as fallback
+		const url = new URL(request.url, `http://${request.headers.host}`);
+		const queryToken = url.searchParams.get("token");
+		const authHeader = request.headers["authorization"] || (queryToken ? `Bearer ${queryToken}` : undefined);
+
+		const authResult = authenticateWs(authHeader, ws);
 		userId = authResult.userId;
 
 		chatConnections.add(userId, ws);

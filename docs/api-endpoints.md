@@ -88,7 +88,7 @@ Possible error codes include: invalid JSON, invalid payload, unauthenticated, us
 
 ## Behavior
 
-- **Storage:** CHAT and GAME_INVITE messages are stored. When the recipient connects (or reconnects), undelivered messages are sent.
+- **Storage:** CHAT and GAME_INVITE messages are stored. When the recipient connects, only undelivered messages (not yet marked as delivered) are sent. Messages are marked as delivered after being successfully sent via WebSocket, so they won't be re-sent on subsequent connections.
 - **Blocking:** If the sender is blocked by the recipient (or vice versa), the server may respond with an ERROR and not deliver.
 - **Internal:** Room-service calls `POST /api/v1/chat/internal/invitation-created` when an invitation is created; the chat service may create a GAME_INVITE or notification. This endpoint is for backend use only.
 

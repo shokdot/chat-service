@@ -36,6 +36,8 @@ export const sendUndeliveredMessages = async (
 	try {
 		const messages = await messageStore.getUndeliveredMessages(userId);
 
+		const deliveredIds: string[] = [];
+
 		for (const msg of messages) {
 			const outgoing: OutgoingMessage =
 				msg.type === "CHAT"
@@ -54,8 +56,12 @@ export const sendUndeliveredMessages = async (
 
 			if (ws.readyState === WebSocket.OPEN) {
 				ws.send(JSON.stringify(outgoing));
+				deliveredIds.push(msg.id);
 			}
 		}
+
+		// Mark messages as delivered so they won't be re-sent on next connection
+		await messageStore.markDelivered(deliveredIds);
 	} catch (error) {
 		// Log error but don't fail connection if we can't fetch messages
 		console.error("Failed to fetch undelivered messages:", error);

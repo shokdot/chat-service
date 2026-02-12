@@ -10,7 +10,7 @@ const invitationCreatedHandler = async (request: FastifyRequest<{ Body: Invitati
 	const timestamp = new Date().toISOString();
 	const payload = { invitationId };
 
-	await messageStore.add({
+	const messageId = await messageStore.add({
 		type: "GAME_INVITE",
 		from: inviterId,
 		to: inviteeId,
@@ -25,7 +25,13 @@ const invitationCreatedHandler = async (request: FastifyRequest<{ Body: Invitati
 		sentAt: timestamp
 	};
 
-	chatConnections.send(inviteeId, outgoing);
+	const delivered = chatConnections.send(inviteeId, outgoing);
+
+	// Mark as delivered if sent in real-time
+	if (delivered) {
+		await messageStore.markDelivered([messageId]);
+	}
+
 	await sendGameInviteNotification(inviteeId, inviterId, invitationId);
 
 	return reply.status(204).send();

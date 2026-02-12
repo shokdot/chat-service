@@ -67,7 +67,7 @@ export const handleMessage = async (
 			};
 
 			// Always store message in DB, even if receiver is offline
-			await messageStore.add({
+			const messageId = await messageStore.add({
 				type: "CHAT",
 				from: userId,
 				to: message.to,
@@ -76,7 +76,12 @@ export const handleMessage = async (
 			});
 
 			// Try to deliver if receiver is online
-			chatConnections.send(message.to, outgoing);
+			const delivered = chatConnections.send(message.to, outgoing);
+
+			// Mark as delivered if sent in real-time
+			if (delivered) {
+				await messageStore.markDelivered([messageId]);
+			}
 
 			// Send notification to indicate unread message from sender
 			// Notification helps show unread message indicators
@@ -90,7 +95,7 @@ export const handleMessage = async (
 			};
 
 			// Always store message in DB, even if receiver is offline
-			await messageStore.add({
+			const messageId = await messageStore.add({
 				type: "GAME_INVITE",
 				from: userId,
 				to: message.to,
@@ -99,7 +104,12 @@ export const handleMessage = async (
 			});
 
 			// Try to deliver if receiver is online
-			chatConnections.send(message.to, outgoing);
+			const delivered = chatConnections.send(message.to, outgoing);
+
+			// Mark as delivered if sent in real-time
+			if (delivered) {
+				await messageStore.markDelivered([messageId]);
+			}
 
 			// Send notification for game invite
 			await sendGameInviteNotification(message.to, userId);

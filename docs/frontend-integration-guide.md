@@ -21,7 +21,7 @@ How a **React/Next.js** frontend should integrate with the Chat Service: WebSock
 
 1. Obtain access token (from Auth Service login/refresh).
 2. Open WebSocket to `wss://{host}:{port}/api/v1/chat/ws` with auth (header or query, as supported).
-3. On open: connection ready; optionally request or display undelivered messages (server may send them automatically on connect).
+3. On open: connection ready; the server automatically sends any undelivered messages (messages not yet marked as delivered). Once sent, they are marked as delivered and won't be re-sent on subsequent connections.
 4. On message: parse JSON; handle `CHAT`, `GAME_INVITE`, `ERROR`.
 5. On close/error: clear UI, optionally reconnect (e.g. after refreshing token).
 
@@ -96,7 +96,7 @@ ws.onmessage = (event) => {
 ## 5. Reconnection and token refresh
 
 - If the WebSocket closes (e.g. 401/403), refresh the access token (Auth Service) and reconnect with the new token.
-- On reconnect, the server may send undelivered messages; render them in the same way as live messages.
+- On reconnect, the server sends only messages that haven't been delivered yet (delivery is tracked per message). Render them in the same way as live messages.
 
 ---
 
