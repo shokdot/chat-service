@@ -3,12 +3,12 @@
 	"version": "1.0.0",
 	"type": "module",
 	"scripts": {
-		"prestart": "npm run db:deploy",
+		"prestart": "npm run db:push",
 		"start": "node dist/server.js",
 		"build": "tsup",
 		"dev": "tsx watch src/server.ts",
-		"predev": "npm run db:deploy",
-		"db:deploy": "npx prisma migrate deploy && npx prisma generate"
+		"predev": "npm run db:push",
+		"db:push": "prisma db push --accept-data-loss && prisma generate"
 	},
 	"devDependencies": {
 		"@types/node": "^24.3.0",
