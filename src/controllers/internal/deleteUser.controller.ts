@@ -1,5 +1,5 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import deleteUserMessages from "../services/deleteUserMessages.service.js";
+import deleteUserMessages from "../../services/deleteUserMessages.service.js";
 
 const deleteUserHandler = async (request: FastifyRequest<{ Params: { userId: string } }>, reply: FastifyReply) => {
     try {
